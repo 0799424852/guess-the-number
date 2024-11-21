@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Guess the Number Game</h1>
+    
+    <p>You have <span id="attempts">{{ attempts }}</span> attempts left.</p>
+
+    <form id="guessForm" method="POST">
+        <label for="choice">Enter your guess (0-9): </label>
+        <input type="number" name="choice" id="choice" required min="0" max="9">
+        <button type="submit">Submit Guess</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        $(document).ready(function() {
+            $('#guessForm').submit(function(event) {
+                event.preventDefault();
+
+                let userChoice = $('#choice').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/',
+                    data: { choice: userChoice },
+                    success: function(response) {
+                        $('#message').text(response.message);
+                        $('#attempts').text(response.attempts);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
